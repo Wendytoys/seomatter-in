@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-	const { proof, ...otherParams } = await req.json();
+	const { action, ...proof } = await req.json();
 	const app_id = process.env.WLD_APP_ID;
 	const client_secret = process.env.WLD_CLIENT_SECRET;
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ ...proof, client_secret, ...otherParams }),
+			body: JSON.stringify({ ...proof, action, client_secret }),
 		}
 	);
 
@@ -33,6 +33,9 @@ export async function POST(req: NextRequest) {
 	} else {
 		// Handle errors from Worldcoin API
 		console.error("Verification failed:", wldResponse);
-		return NextResponse.json({ success: false, error: wldResponse }, { status: 400 });
+		return NextResponse.json(
+			{ success: false, code: wldResponse.code, detail: wldResponse.detail },
+			{ status: 400 }
+		);
 	}
 }

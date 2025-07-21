@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function Home() {
 	const [verified, setVerified] = useState(false);
+	const action = "verify-user"; // Define your action string here
 
 	const handleVerify = async (proof: ISuccessResult) => {
 		const res = await fetch("/api/verify", {
@@ -12,10 +13,12 @@ export default function Home() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(proof),
+			body: JSON.stringify({ ...proof, action }), // Send action to backend
 		});
 		if (!res.ok) {
-			throw new Error("Verification failed.");
+			const error = await res.json();
+			console.error("Verification failed:", error);
+			throw new Error(`Verification failed: ${error.code} ${error.detail}`);
 		}
 		const { success } = await res.json();
 		if (success) {
@@ -24,8 +27,6 @@ export default function Home() {
 	};
 
 	const onSuccess = () => {
-		// This is where you'll handle the successful verification
-		// For example, you can redirect the user to a new page
 		window.alert("Successfully verified!");
 	};
 
@@ -37,7 +38,7 @@ export default function Home() {
 				{!verified && (
 					<IDKitWidget
 						app_id={process.env.NEXT_PUBLIC_WLD_APP_ID!}
-						action="verify-action" // <-- TODO: Replace with your Action ID
+						action={action} // Use the action string
 						onSuccess={onSuccess}
 						handleVerify={handleVerify}
 					>
