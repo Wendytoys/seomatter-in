@@ -81,7 +81,7 @@ export default function Home() {
 						<>
 							<div className="text-center">
 								<h2 className="text-3xl font-bold">Verify Your Humanity</h2>
-								<p className="mt-2 text-gray-300">Access exclusive tools by proving you're a unique human, not a bot.</p>
+								<p className="mt-2 text-gray-300">Access exclusive tools by proving you&apos;re a unique human, not a bot.</p>
 							</div>
 							{appId ? (
 								<IDKitWidget
