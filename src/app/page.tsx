@@ -85,7 +85,7 @@ export default function Home() {
 							</div>
 							{appId ? (
 								<IDKitWidget
-									app_id={appId}
+									app_id={appId as `app_${string}`}
 									action={action}
 									handleVerify={handleVerify}
 								>
