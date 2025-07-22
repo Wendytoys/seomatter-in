@@ -14,7 +14,6 @@ export default function Home() {
 	const appId = process.env.NEXT_PUBLIC_WLD_APP_ID;
 
 	const handleVerify = async (proof: ISuccessResult) => {
-		setIsVerifying(true);
 		const res = await fetch("/api/verify", {
 			method: "POST",
 			headers: {
@@ -37,6 +36,10 @@ export default function Home() {
 		} else {
 			setIsVerifying(false);
 		}
+	};
+
+	const onSuccess = () => {
+		setIsVerifying(true);
 	};
 
 	// GSAP Animations
@@ -87,6 +90,7 @@ export default function Home() {
 								<IDKitWidget
 									app_id={appId as `app_${string}`}
 									action={action}
+									onSuccess={onSuccess}
 									handleVerify={handleVerify}
 								>
 									{({ open }) => (
