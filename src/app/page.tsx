@@ -11,6 +11,7 @@ export default function Home() {
 	const [isVerifying, setIsVerifying] = useState(false);
 	const router = useRouter();
 	const action = "verify-user";
+	const appId = process.env.NEXT_PUBLIC_WLD_APP_ID;
 
 	const handleVerify = async (proof: ISuccessResult) => {
 		setIsVerifying(true);
@@ -82,20 +83,27 @@ export default function Home() {
 								<h2 className="text-3xl font-bold">Verify Your Humanity</h2>
 								<p className="mt-2 text-gray-300">Access exclusive tools by proving you're a unique human, not a bot.</p>
 							</div>
-							<IDKitWidget
-								app_id={process.env.NEXT_PUBLIC_WLD_APP_ID!}
-								action={action}
-								handleVerify={handleVerify}
-							>
-								{({ open }) => (
-									<button
-										className="w-full px-4 py-3 font-bold text-black bg-white rounded-lg hover:bg-gray-200 transition-colors duration-300"
-										onClick={open}
-									>
-										Verify with World ID
-									</button>
-								)}
-							</IDKitWidget>
+							{appId ? (
+								<IDKitWidget
+									app_id={appId}
+									action={action}
+									handleVerify={handleVerify}
+								>
+									{({ open }) => (
+										<button
+											className="w-full px-4 py-3 font-bold text-black bg-white rounded-lg hover:bg-gray-200 transition-colors duration-300"
+											onClick={open}
+										>
+											Verify with World ID
+										</button>
+									)}
+								</IDKitWidget>
+							) : (
+								<div className="p-4 text-center text-red-400 bg-red-900/50 rounded-md">
+									<p>App ID is not configured.</p>
+									<p className="text-xs">Please set NEXT_PUBLIC_WLD_APP_ID in your environment variables.</p>
+								</div>
+							)}
 						</>
 					)}
 				</div>
